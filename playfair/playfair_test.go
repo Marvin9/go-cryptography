@@ -82,12 +82,17 @@ func TestNormalizePlainText(t *testing.T) {
 	}
 }
 
-func TestEncryption(t *testing.T) {
+func TestPlaifair(t *testing.T) {
 	pt := "we are discovered save yourself"
 	key := "monarchy"
 	cipher := Encrypt(pt, key)
 	expect := "ugrmkcsxhmufmkbtoxgcmvatluiv"
 	if cipher != expect {
 		testError(expect, cipher, t)
+	}
+	pt = Decrypt(cipher, key)
+	expect = "wearediscoveredsaveyourselfx"
+	if pt != expect {
+		testError(expect, pt, t)
 	}
 }
