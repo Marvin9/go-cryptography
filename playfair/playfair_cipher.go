@@ -161,6 +161,54 @@ func Encrypt(plainText string, key string) string {
 	return generateCipher(plainText, tableMap, tableArray)
 }
 
+// Decrypt - playfair cipher decryption
+func Decrypt(cipherText string, key string) string {
+	plainText := ""
+	tableMap := generateTable(key)
+	tableArray := tableArray(tableMap)
+
+	lim := len(cipherText)
+	for i := 0; i < lim; i += 2 {
+		char1, char2 := cipherText[i], cipherText[i+1]
+
+		char1Pos, char2Pos := tableMap[string(char1)], tableMap[string(char2)]
+
+		char1PosRow, char1PosCol := char1Pos[0], char1Pos[1]
+		char2PosRow, char2PosCol := char2Pos[0], char2Pos[1]
+
+		if char1PosCol == char2PosCol {
+			prevRow := char1PosRow - 1
+			if prevRow < 0 {
+				prevRow = 4
+			}
+			plainText += tableArray[prevRow][char1PosCol]
+
+			prevRow = char2PosRow - 1
+			if prevRow < 0 {
+				prevRow = 4
+			}
+			plainText += tableArray[prevRow][char2PosCol]
+		} else if char1PosRow == char2PosRow {
+			prevCol := char1PosCol - 1
+			if prevCol < 0 {
+				prevCol = 4
+			}
+			plainText += tableArray[char1PosRow][prevCol]
+
+			prevCol = char2PosCol - 1
+			if prevCol < 0 {
+				prevCol = 4
+			}
+			plainText += tableArray[char1PosRow][prevCol]
+		} else {
+			plainText += tableArray[char1PosRow][char2PosCol]
+			plainText += tableArray[char2PosRow][char1PosCol]
+		}
+	}
+
+	return plainText
+}
+
 func main() {
 	var plainText string
 	var key string
@@ -169,5 +217,7 @@ func main() {
 	fmt.Printf("Enter key: ")
 	fmt.Scan(&key)
 
-	fmt.Println("Encrypted text:", Encrypt(plainText, key))
+	encrypt := Encrypt(plainText, key)
+	fmt.Println("Encrypted text:", encrypt)
+	fmt.Println("Decrypted text:", Decrypt(encrypt, key))
 }
