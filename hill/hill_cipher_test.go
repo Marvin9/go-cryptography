@@ -96,3 +96,15 @@ func TextVectorToPlainText(t *testing.T) {
 		t.Errorf("Expected %v, got %v", expect, ans)
 	}
 }
+
+func TestEncryption(t *testing.T) {
+	size := 2
+	key := "DZYR"
+	plainText := "MISSISSIPPIK"
+	encrypted := Encrypt(plainText, key, size)
+	expect := "CIKKGEUWEROY"
+
+	if expect != encrypted {
+		t.Errorf("Expected %v, got %v", expect, encrypted)
+	}
+}

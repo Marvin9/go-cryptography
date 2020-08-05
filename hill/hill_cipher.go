@@ -69,7 +69,7 @@ func Encrypt(pt, key string, size int) string {
 
 	cipherText := ""
 	for i := 0; i < len(pt); i += size {
-		plainText := pt[:i+size]
+		plainText := pt[i : i+size]
 		vectorizedPt := vectorizePlainText(plainText)
 
 		multipliedMatrix := vectorMulti(vectorizedKey, vectorizedPt)
